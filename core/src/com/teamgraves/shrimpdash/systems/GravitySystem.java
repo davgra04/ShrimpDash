@@ -26,8 +26,11 @@ public class GravitySystem extends IteratingSystem {
 		MovementComponent mov = mm.get(entity);
 		StateComponent state = sm.get(entity);
 
-//		if (state.get() == ShrimpComponent.STATE_JUMP){			
+//		if (state.get() == ShrimpComponent.STATE_JUMP){		
+//		System.out.println(mov.velocity.y);
+		if(mov.velocity.y > -10) {			
 			mov.velocity.add(World.gravity.x * deltaTime, World.gravity.y * deltaTime);
+		}
 //		}
 	}
 

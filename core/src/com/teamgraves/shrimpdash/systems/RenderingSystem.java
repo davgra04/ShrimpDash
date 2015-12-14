@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.teamgraves.shrimpdash.GameScreen;
+import com.teamgraves.shrimpdash.LevelOneScreen;
 import com.teamgraves.shrimpdash.components.BoundsComponent;
 import com.teamgraves.shrimpdash.components.TextureComponent;
 import com.teamgraves.shrimpdash.components.TransformComponent;
@@ -24,7 +24,7 @@ public class RenderingSystem extends IteratingSystem {
 
 	static final float FRUSTUM_WIDTH = 16;
 	static final float FRUSTUM_HEIGHT = 9;
-	static final float PIXELS_TO_METERS = GameScreen.PIXELS_TO_METERS;
+	static final float PIXELS_TO_METERS = LevelOneScreen.PIXELS_TO_METERS;
 	
 	private SpriteBatch batch;
 	private Array<Entity> renderQueue;
@@ -36,7 +36,7 @@ public class RenderingSystem extends IteratingSystem {
 	public ComponentMapper<TransformComponent> transformM;
 	public ComponentMapper<BoundsComponent> bm;
 	
-	public boolean drawBounds = false;
+	public boolean drawBounds = true;
 	
 	public RenderingSystem(SpriteBatch batch) {
 		super(Family.all(TextureComponent.class, TransformComponent.class).get());

@@ -20,7 +20,7 @@ import com.teamgraves.shrimpdash.systems.RenderingSystem;
 import com.teamgraves.shrimpdash.systems.ShrimpSystem;
 import com.teamgraves.shrimpdash.systems.StateSystem;
 
-public class GameScreen extends ScreenAdapter {
+public class LevelOneScreen extends ScreenAdapter {
 	static final int GAME_READY = 0;
 	static final int GAME_RUNNING = 1;
 	static final int GAME_PAUSED = 2;
@@ -41,7 +41,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	private GlyphLayout gameRunningLayout;
 	
-	public GameScreen(ShrimpDash game) {
+	public LevelOneScreen(ShrimpDash game) {
 		this.game = game;
 		
 		state = GAME_READY;

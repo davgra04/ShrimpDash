@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -23,9 +22,7 @@ public class MenuScreen extends ScreenAdapter {
 	private int arrowCurrentPos = 0;
 	private GlyphLayout arrowLayout;
 	
-	private Rectangle playBounds;
 	private Vector2 playPos;
-	private Rectangle controlsBounds;
 	private Vector2 controlsPos;
 	
 	private String playString = "Play";
@@ -35,7 +32,16 @@ public class MenuScreen extends ScreenAdapter {
 	private GlyphLayout controlsLayout;
 	private GlyphLayout instructionsLayout;
 	
+	private float bkg_time = 0;
+	
 	private Vector2 titlePos;
+	private Vector2 titleSize;
+	private float titleScale;
+	private Vector2 titleOrigin;
+	private float titleRot = 0f;
+	private boolean titleRotAdd = false;
+	private float titleRotAmt = -15f;
+	
 	
 	public MenuScreen (ShrimpDash game) {
 		this.game = game;
@@ -47,11 +53,9 @@ public class MenuScreen extends ScreenAdapter {
 
 		controlsLayout = new GlyphLayout(Assets.font24, controlsString, new Color(1, 1, 1, 1), 0, Align.left, false);
 		controlsPos = new Vector2(800/2 - controlsLayout.width/2, 130 - controlsLayout.height*2);
-		controlsBounds = new Rectangle(controlsPos.x, controlsPos.y - controlsLayout.height, controlsLayout.width, controlsLayout.height);
 
 		playLayout = new GlyphLayout(Assets.font24, playString, new Color(1, 1, 1, 1), 0, Align.left, false);
 		playPos = new Vector2(controlsPos.x, 130);
-		playBounds = new Rectangle(playPos.x, playPos.y, playLayout.width, playLayout.height);
 
 		arrowLayout = new GlyphLayout(Assets.font24, ">", new Color(0.859f, 0.106f, 0.196f, 1), 0, Align.left, false);
 		arrowPos = new Array<Vector2>();
@@ -60,17 +64,21 @@ public class MenuScreen extends ScreenAdapter {
 		
 		instructionsLayout = new GlyphLayout(Assets.font12, instructionsString, new Color(1, 1, 1, 1), 0, Align.left, false);
 
-		titlePos = new Vector2((800-Assets.title.getWidth()*5/8)/2, 450 - Assets.title.getHeight()*5/8 - 20);
+		titleScale = 0.54f;
+		titleSize = new Vector2(Assets.title.getRegionWidth(), Assets.title.getRegionHeight());
+		titlePos = new Vector2(88, 30);
+		titleOrigin = new Vector2(titlePos.x + titleSize.x*titleScale/2.0f, titlePos.y + titleSize.y*titleScale/2.0f);
 		
 	}
+
 	
-	public void update () {
+	public void update (float delta) {
 		
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 			if (arrowCurrentPos == OPTION_PLAY) {
 				Assets.gameStartSound.play(1);
 				Assets.mainTheme.stop();
-				game.setScreen(new GameScreen(game));
+				game.setScreen(new LevelOneScreen(game));
 			}
 			else if (arrowCurrentPos == OPTION_CONTROLS) {
 				Assets.gameStartSound2.play();
@@ -80,9 +88,23 @@ public class MenuScreen extends ScreenAdapter {
 			Assets.changeOptionSound.play(1);
 			arrowCurrentPos = (arrowCurrentPos + 1) % arrowPos.size;
 		}
+		
+		bkg_time += delta;
+//		System.out.println(bkg_time);
+		if (bkg_time > 0.50238f) {
+			bkg_time = 0;
+			if (titleRotAdd) {
+				titleRot += titleRotAmt;
+			}
+			else {
+				titleRot -= titleRotAmt;				
+			}
+			titleRotAdd = !titleRotAdd;
+			
+		}
 	}
 	
-	public void draw () {
+	public void draw (float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		cam.update();
@@ -90,8 +112,22 @@ public class MenuScreen extends ScreenAdapter {
 		game.batch.setProjectionMatrix(cam.combined);
 		
 		game.batch.begin();
-		game.batch.draw(Assets.title, titlePos.x, titlePos.y, Assets.title.getWidth()*5/8, Assets.title.getHeight()*5/8);
-		game.batch.draw(Assets.shrimp_idle1.getFrame(), 475, 135, Assets.shrimp_idle1.width*4, Assets.shrimp_idle1.height*4);
+		
+//		TextureRegion tex = Assets.falling_bkg.getKeyFrame(bkg_time, true);
+//		float scale = 800.0f / tex.getRegionWidth();
+//		game.batch.draw(tex, 0, 0, 0, 0, tex.getRegionWidth(), tex.getRegionHeight(), scale, scale, 0);
+		
+//		float scale = 800.0f / Assets.title_bkg.getWidth();
+//		game.batch.draw(Assets.title_bkg, 0, 0, 0, 0, Assets.title_bkg.getWidth(), Assets.title_bkg.getHeight(), scale, scale, 0);
+		game.batch.draw(Assets.title_bkg, 0, 0, 800, 450);
+		
+		game.batch.draw(Assets.title, 
+				titlePos.x, titlePos.y,
+				titleOrigin.x, titleOrigin.y,
+				titleSize.x*titleScale, titleSize.y*titleScale,
+				titleScale, titleScale, 
+				titleRot);
+		game.batch.draw(Assets.shrimp_idle1.getFrame(), 430, 120, Assets.shrimp_idle1.width*4, Assets.shrimp_idle1.height*4);
 		
 		Assets.font24.draw(game.batch, playLayout, playPos.x, playPos.y);
 		Assets.font24.draw(game.batch, controlsLayout, controlsPos.x, controlsPos.y);
@@ -99,12 +135,11 @@ public class MenuScreen extends ScreenAdapter {
 		Assets.font24.draw(game.batch, arrowLayout, arrowPos.get(arrowCurrentPos).x, arrowPos.get(arrowCurrentPos).y);
 		
 		game.batch.end();
-		
 	}
 	
 	@Override
 	public void render (float delta) {
-		update();
-		draw();
+		update(delta);
+		draw(delta);
 	}
 }

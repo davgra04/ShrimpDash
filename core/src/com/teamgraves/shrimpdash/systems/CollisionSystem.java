@@ -65,10 +65,10 @@ public class CollisionSystem extends EntitySystem {
 				if (shrimpBounds.bounds.overlaps(envBounds.bounds)) {
 					float w = 0.5f * (shrimpBounds.bounds.width + envBounds.bounds.width);
 					float h = 0.5f * (shrimpBounds.bounds.height + envBounds.bounds.height);
-//					float dx = (shrimpBounds.bounds.x + shrimpBounds.bounds.width/2) - (envBounds.bounds.x + envBounds.bounds.width/2);
-//					float dy = (shrimpBounds.bounds.y + shrimpBounds.bounds.height/2) - (envBounds.bounds.y + envBounds.bounds.height/2);
-					float dx = shrimpPos.pos.x - envPos.pos.x;
-					float dy = shrimpPos.pos.y - envPos.pos.y;
+					float dx = (shrimpBounds.bounds.x + shrimpBounds.bounds.width/2) - (envBounds.bounds.x + envBounds.bounds.width/2);
+					float dy = (shrimpBounds.bounds.y + shrimpBounds.bounds.height/2) - (envBounds.bounds.y + envBounds.bounds.height/2);
+//					float dx = shrimpPos.pos.x - envPos.pos.x;
+//					float dy = shrimpPos.pos.y - envPos.pos.y;
 					float wy = w * dy;
 					float hx = h * dx;
 					
@@ -77,10 +77,12 @@ public class CollisionSystem extends EntitySystem {
 					if (wy > hx) {
 						if (wy > -hx) {
 							// Top Collision
+							System.out.println("TOP COLLISION");
 							if (shrimpMov.velocity.y <= 0) {
 								shrimpState.set(ShrimpComponent.STATE_RUNNING);
 								shrimpMov.velocity.y = 0;
-								shrimpPos.pos.y = envPos.pos.y + envBounds.bounds.height/2 + shrimpBounds.bounds.height/2;								
+//								shrimpPos.pos.y = envPos.pos.y + envBounds.bounds.height/2 + shrimpBounds.bounds.height/2;		
+								shrimpPos.pos.y = envBounds.bounds.y + envBounds.bounds.height + shrimpBounds.bounds.height/2 + 0.05f;
 							}
 						}
 						else {
@@ -89,7 +91,8 @@ public class CollisionSystem extends EntitySystem {
 								shrimpState.set(ShrimpComponent.STATE_IDLE);								
 							}
 							shrimpMov.velocity.x = 0;
-							shrimpPos.pos.x = envPos.pos.x - envBounds.bounds.width/2 - shrimpBounds.bounds.width/2;
+//							shrimpPos.pos.x = envPos.pos.x - envBounds.bounds.width/2 - shrimpBounds.bounds.width/2;
+							shrimpPos.pos.x = envBounds.bounds.x - envBounds.bounds.width/2 - shrimpBounds.bounds.width/2;
 						}
 					}
 					else {

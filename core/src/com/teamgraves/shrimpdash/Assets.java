@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.utils.Array;
 
 public class Assets {
-	public static Texture title;
+	public static TextureRegion title;
 	public static Texture playButton;
 	public static Texture controlsButton;
 	
@@ -21,10 +21,14 @@ public class Assets {
 	public static Animation shrimp_run;
 	public static Animation shrimp_boost;
 	public static Animation shrimp_jump;
-	
-	public static Array<Texture> counters;
+
+	public static Array<Texture> test_counters;
+	public static Array<Texture> customer_counters;
 	
 	public static Texture bkg;
+	public static Texture title_bkg;
+	public static Animation falling_bkg;
+	
 	public static Texture person;
 	public static Texture test_obstacle;
 	
@@ -44,7 +48,7 @@ public class Assets {
 	
 	public static void load () {
 		// Main Menu Assets
-		title = new Texture("sprites/title_placeholder.png");
+		title = new TextureRegion( new Texture("sprites/title.png") );
 //		playButton = new Texture("play_button_placeholder.png");
 //		controlsButton = new Texture("controls_button_placeholder.png");
 		
@@ -60,16 +64,26 @@ public class Assets {
 		shrimp_jump.setPlayMode(Animation.PlayMode.LOOP);
 		
 		// Counter Assets
-		counters = new Array<Texture>();
-		counters.add(new Texture("counter_placeholder/counter_placeholder_1.png"));
-		counters.add(new Texture("counter_placeholder/counter_placeholder_2.png"));
-		counters.add(new Texture("counter_placeholder/counter_placeholder_3.png"));
-		counters.add(new Texture("counter_placeholder/counter_placeholder_4.png"));
-		counters.add(new Texture("counter_placeholder/counter_placeholder_5.png"));
-		counters.add(new Texture("counter_placeholder/counter_placeholder_6.png"));
+		test_counters = new Array<Texture>();
+		test_counters.add(new Texture("counter_placeholder/counter_placeholder_1.png"));
+		test_counters.add(new Texture("counter_placeholder/counter_placeholder_2.png"));
+		test_counters.add(new Texture("counter_placeholder/counter_placeholder_3.png"));
+		test_counters.add(new Texture("counter_placeholder/counter_placeholder_4.png"));
+		test_counters.add(new Texture("counter_placeholder/counter_placeholder_5.png"));
+		test_counters.add(new Texture("counter_placeholder/counter_placeholder_6.png"));
+		customer_counters = new Array<Texture>();
+		customer_counters.add(new Texture("sprites/counters/customer counter 1.png"));
+		customer_counters.add(new Texture("sprites/counters/customer counter 2.png"));
+		customer_counters.add(new Texture("sprites/counters/customer counter 3.png"));
+		customer_counters.add(new Texture("sprites/counters/customer counter 4.png"));
 		
 		// Background Assets
 		bkg = new Texture("bkg_placeholder/bkg_placeholder_double.png");
+		title_bkg = new Texture("sprites/backgrounds/title background.png");
+		falling_bkg = loadAnimFromSheet("sprites/backgrounds/falling_bkg_sheet.png", 9, 9, 1/60.0f);
+		
+		
+		// World Assets
 		person = new Texture("bkg_placeholder/person.png");
 		test_obstacle = new Texture("sprites/placeholder_obstacle.png");
 		

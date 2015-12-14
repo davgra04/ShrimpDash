@@ -25,7 +25,7 @@ public class World {
 	
 	public static final float WORLD_WIDTH = 16 * 10;
 	public static final float WORLD_HEIGHT = 9;
-	public static final float PIXELS_TO_METERS = GameScreen.PIXELS_TO_METERS;
+	public static final float PIXELS_TO_METERS = LevelOneScreen.PIXELS_TO_METERS;
 	
 	public static final Vector2 gravity = new Vector2(0, -40);
 
@@ -52,71 +52,114 @@ public class World {
 	private void generateLevel() {
 		
 		// Generate Counters
-		int num_counters = 1000;
+		int num_counters = 4;
 		int last_index = -1;
 		int counter_index = -1;
 		for(int i = 0; i < num_counters; i++) {
 			while(counter_index == last_index) {
-				counter_index = rand.nextInt(Assets.counters.size);
+				counter_index = rand.nextInt(Assets.customer_counters.size);
 			}
 			
 			Entity entity = new Entity();
 			
 			TransformComponent pos = new TransformComponent();
 			TextureComponent texture = new TextureComponent();
-			BoundsComponent bounds = new BoundsComponent();
-			EnvironmentComponent env = new EnvironmentComponent();
 			
-			texture.region = new TextureRegion(Assets.counters.get(counter_index));
+			texture.region = new TextureRegion(Assets.customer_counters.get(counter_index));
 			
-			pos.scale.scl(0.4f);
+			pos.scale.scl(0.2f);
 //			pos.pos.set(i * 9.15f + 5.0f, 1.0f, 100.0f + num_counters - i);
-			pos.pos.set(PIXELS_TO_METERS * pos.scale.x * (i * (texture.region.getRegionWidth() - 67) + 1.0f), 
-						PIXELS_TO_METERS * 1.0f, 
+			pos.pos.set(PIXELS_TO_METERS * pos.scale.x * (i * (texture.region.getRegionWidth()) + texture.region.getRegionWidth()/2) + 5, 
+						1.5f, 
 						100.0f + num_counters - i);
 			
-			bounds.bounds.width = PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionWidth() - 67);
-			bounds.bounds.height = PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionHeight() - 36*2);
 			
 			entity.add(pos);
 			entity.add(texture);
-			entity.add(bounds);
-			entity.add(env);
+
+			if (i == 0) {
+				BoundsComponent bounds = new BoundsComponent();
+				EnvironmentComponent env = new EnvironmentComponent();
+				bounds.bounds.width = PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionWidth()) * num_counters;
+				bounds.bounds.height = PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionHeight());
+				bounds.offset.x = PIXELS_TO_METERS * pos.scale.x * ((num_counters - 1)/2 * texture.region.getRegionWidth());
+				bounds.offset.y = -PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionHeight()/2);
+//				bounds.offset.x = PIXELS_TO_METERS * pos.scale.x * num_counters * texture.region.getRegionWidth()/2;
+//			bounds.offset.y = -bounds.bounds.height / 2;
+				entity.add(bounds);
+				entity.add(env);
+				
+			}
 			
 			engine.addEntity(entity);
 			
 			last_index = counter_index;
 		}
+//		int num_counters = 1000;
+//		int last_index = -1;
+//		int counter_index = -1;
+//		for(int i = 0; i < num_counters; i++) {
+//			while(counter_index == last_index) {
+//				counter_index = rand.nextInt(Assets.test_counters.size);
+//			}
+//			
+//			Entity entity = new Entity();
+//			
+//			TransformComponent pos = new TransformComponent();
+//			TextureComponent texture = new TextureComponent();
+//			BoundsComponent bounds = new BoundsComponent();
+//			EnvironmentComponent env = new EnvironmentComponent();
+//			
+//			texture.region = new TextureRegion(Assets.test_counters.get(counter_index));
+//			
+//			pos.scale.scl(0.4f);
+////			pos.pos.set(i * 9.15f + 5.0f, 1.0f, 100.0f + num_counters - i);
+//			pos.pos.set(PIXELS_TO_METERS * pos.scale.x * (i * (texture.region.getRegionWidth() - 67) + 1.0f), 
+//						PIXELS_TO_METERS * 1.0f, 
+//						100.0f + num_counters - i);
+//			
+//			bounds.bounds.width = PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionWidth() - 67);
+//			bounds.bounds.height = PIXELS_TO_METERS * pos.scale.x * (texture.region.getRegionHeight() - 36*2);
+//			
+//			entity.add(pos);
+//			entity.add(texture);
+//			entity.add(bounds);
+//			entity.add(env);
+//			
+//			engine.addEntity(entity);
+//			
+//			last_index = counter_index;
+//		}
 		
 		// Generate obstacles
-		float test_scale = 0.1f;
-		for(int i = 0; i < 100; i++) {
-			Entity entity = new Entity();
-			
-			TransformComponent pos = new TransformComponent();
-			TextureComponent tex = new TextureComponent();
-			BoundsComponent bounds = new BoundsComponent();
-			EnvironmentComponent env = new EnvironmentComponent();
-			
-			tex.region = new TextureRegion(Assets.test_obstacle);
-			
-			pos.scale.scl(test_scale);
-
-			bounds.bounds.width = PIXELS_TO_METERS * pos.scale.x * (tex.region.getRegionWidth() - 159*2);
-			bounds.bounds.height = PIXELS_TO_METERS * pos.scale.x * (tex.region.getRegionHeight()) / 2;
-			
-			float xpos = 15 + rand.nextFloat()*5f + 10*i;
-			float ypos = 1.9f;
-			
-			pos.pos.set(xpos, ypos, -ypos - bounds.bounds.height/2);
-
-			entity.add(pos);
-			entity.add(tex);
-			entity.add(bounds);
-			entity.add(env);
-			
-			engine.addEntity(entity);			
-		}
+//		float test_scale = 0.1f;
+//		for(int i = 0; i < 100; i++) {
+//			Entity entity = new Entity();
+//			
+//			TransformComponent pos = new TransformComponent();
+//			TextureComponent tex = new TextureComponent();
+//			BoundsComponent bounds = new BoundsComponent();
+//			EnvironmentComponent env = new EnvironmentComponent();
+//			
+//			tex.region = new TextureRegion(Assets.test_obstacle);
+//			
+//			pos.scale.scl(test_scale);
+//
+//			bounds.bounds.width = PIXELS_TO_METERS * pos.scale.x * (tex.region.getRegionWidth() - 159*2);
+//			bounds.bounds.height = PIXELS_TO_METERS * pos.scale.x * (tex.region.getRegionHeight()) / 2;
+//			
+//			float xpos = 15 + rand.nextFloat()*5f + 10*i;
+//			float ypos = 1.9f;
+//			
+//			pos.pos.set(xpos, ypos, -ypos - bounds.bounds.height/2);
+//
+//			entity.add(pos);
+//			entity.add(tex);
+//			entity.add(bounds);
+//			entity.add(env);
+//			
+//			engine.addEntity(entity);			
+//		}
 		
 		// Generate people
 		int num_people = 500;
@@ -158,10 +201,10 @@ public class World {
 		bounds.bounds.width = ShrimpComponent.WIDTH;
 		bounds.bounds.height = ShrimpComponent.HEIGHT;
 		
-		position.pos.set(2.0f, 2f, 0.0f);
+		position.pos.set(2.0f, -0.5f, 0.0f);
 		
 		movement.velocity.x = ShrimpComponent.RUN_VELOCITY;
-		movement.velocity.y = ShrimpComponent.JUMP_VELOCITY;
+		movement.velocity.y = ShrimpComponent.JUMP_VELOCITY*2f;
 
 //		state.set(ShrimpComponent.STATE_IDLE);
 		state.set(ShrimpComponent.STATE_JUMP);

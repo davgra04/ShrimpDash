@@ -9,8 +9,10 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Shrimp Dash!";
 		config.resizable = false;
-		config.height = 450;
-		config.width = 800;
+//		config.height = 450;
+//		config.width = 800;
+		config.height = 675;
+		config.width = 1200;
 		new LwjglApplication(new ShrimpDash(), config);
 	}
 
